@@ -3,6 +3,7 @@
 ## Requirement
 
 Required module: bibtexparser
+
 The script was tested on: Python 3.11.6 (pip3), macOS Ventura (13.6.7), MacBook Air (2020, 1.1 GHz Quad-Core Intel Core i5, 16 GB RAM). 
 
 ## How to use
