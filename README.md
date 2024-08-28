@@ -19,3 +19,7 @@ The script was tested on: Python 3.11.6 (pip3), macOS Ventura (13.6.7), MacBook 
 ## Author
 
 Ryo Fukushima
+
+## Updates
+
+Aug 28, 2024: Export option and a function for converting TeX-specific expressions into plain text were added.
