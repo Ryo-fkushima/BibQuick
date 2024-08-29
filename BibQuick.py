@@ -1,5 +1,5 @@
 #%%
-# BibQuick v0.2.0 (Aug 28, 2024)
+# BibQuick v0.3.0 (Aug 29, 2024)
 # Ryo Fukushima
 #
 import bibtexparser
@@ -27,12 +27,17 @@ path = os.path.join(os.path.dirname(__file__), "BibQuickParams.ini")
 config_ini.read(path, encoding="utf-8")
 
 BibtexLocation = config_ini["CurrentParameters"]["BibtexLocation"]
-ExportOption = config_ini["CurrentParameters"]["Export"]
+ExportOption = config_ini["CurrentParameters"]["InteractiveExport"]
 CitationStyle = config_ini["CurrentParameters"]["CitationStyle"]
 AuthorStyle = config_ini["CurrentParameters"]["AuthorStyle"]
 YearPar = config_ini["CurrentParameters"]["YearPar"]
 TemplateName = config_ini["CurrentParameters"]["Template"]
 PlainConvert = config_ini["CurrentParameters"]["PlainConvert"]
+AlphabeticalSorting = config_ini["CurrentParameters"]["AlphabeticalSorting"]
+
+BatchConvert = config_ini["CurrentParameters"]["BatchConvert"]
+TxtFileLocation = config_ini["CurrentParameters"]["TxtFileLocation"]
+
 
 ##########
 
@@ -40,15 +45,17 @@ SignConverter = {"s": " ", "p": ".", "c": ",", "cl": ":", "ps": ". ", "cs": ", "
                  "ap": "&", "a": "and", "aps": "& ", "as": "and "}
 AuthorStyle_list = AuthorStyle.split(",")
 
-PlainConverter = {"--": "–", '\\"o': "ö", "\\'e": "é", "\\'a": "á", "\\v c": "č", '\\"u': "ü", '\\"a': "ä"}
+PlainConverter = {"--": "–", '\\"o': "ö", "\\'e": "é", "\\'a": "á", "\\v c": "č", '\\"u': "ü", '\\"a': "ä",
+                  "\\v s": "š", "\\v r": "ř", "\\'\\i": "í","\\'u": "ú", "\\'o": "ó", "\\o":"ø", '\\"\\i': "ï", "\\aa": "å"}
+PlainConverter_Inv = dict(zip(PlainConverter.values(), PlainConverter.keys()))
 
 ##########
 # open the bibtex file (as dict)
 print("============================================================")
-print("             BibQuick v0.2.0 by Ryo Fukushima")
+print("             BibQuick v0.3.0 by Ryo Fukushima")
 print("============================================================")
-timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-print(timestamp)
+timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+print("Session No. " + timestamp)
 print("Loading database......")
 with open(BibtexLocation) as bibtex_file:
     bib_database = bibtexparser.load(bibtex_file)
@@ -66,8 +73,7 @@ for i in range(len(bib_datalist)):
 
     if ("author" in bib_datalist[i] and
         "year" in bib_datalist[i] and 
-        bib_datalist[i]["year"].isdigit() == True and
-        "title" in bib_datalist[i] and 
+        bib_datalist[i]["year"].isdigit() == True and 
         "journal" in bib_datalist[i]):
         
         bib_datalist_modified.append(bib_datalist[i])
@@ -75,6 +81,7 @@ for i in range(len(bib_datalist)):
         years.append(int(bib_datalist[i]["year"]))
 
 if PlainConvert == "yes":
+
     for i in range(len(names)):
         for j in range(len(names[i])):
 
@@ -84,8 +91,7 @@ if PlainConvert == "yes":
             for bf, af in PlainConverter.items():
                 names[i][j] = names[i][j].replace(bf, af)
 
-
-print("%i/%i items read"% (len(bib_datalist_modified), len(bib_datalist)))
+print("%i/%i items read from the database"% (len(bib_datalist_modified), len(bib_datalist)))
 
 # split names into firstnames and surnames
 surnames = copy.deepcopy(names)
@@ -157,22 +163,22 @@ for i in range(len(names)):
     else:
         InLineCitations.append(surnames[i][0] + str(years[i]))
 
-                     
+    InLineCitations[i] = InLineCitations[i].lower()
+    InLineCitations[i] = InLineCitations[i].replace(" ","")
+                 
 
-#%%
+
 # make author expression
-SF, SsF, SI, SsI, ScI, ScsI, ScsIp = [], [], [], [], [], [], []
+SsF, SsI, ScI, ScsI = [], [], [], []
 FsS, IsS = [], []
 
 
 for i in range(len(names)):
-    SF.append([x + y for (x, y) in zip(surnames_and[i], firstnames[i])])
+    
     SsF.append([x + " " + y for (x, y) in zip(surnames_and[i], firstnames[i])])
-    SI.append([x + y for (x, y) in zip(surnames_and[i], firstnames_I[i])])
     SsI.append([x + " " + y for (x, y) in zip(surnames_and[i], firstnames_I[i])])
     ScI.append([x + "," + y for (x, y) in zip(surnames_and[i], firstnames_I[i])])
     ScsI.append([x + ", " + y for (x, y) in zip(surnames_and[i], firstnames_I[i])])
-    ScsIp.append([x + ", " + y + "." for (x, y) in zip(surnames_and[i], firstnames_I[i])])
     FsS.append([x + " " + y for (x, y) in zip(firstnames_and[i], surnames[i])])
     IsS.append([x + " " + y for (x, y) in zip(firstnames_I_and[i], surnames[i])])
 
@@ -183,13 +189,10 @@ CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"page
 # A, Y, DL is implemented separately below
 
 AuthorStyleConverter = {
-    "SF": SF,
     "SsF": SsF,
-    "SI": SI,
     "SsI": SsI,
     "ScI": ScI,
     "ScsI": ScsI,
-    "ScsIp": ScsIp,
     "FsS": FsS,
     "IsS": IsS,
 }
@@ -236,47 +239,112 @@ def CitationExport(formattedauthor, **args): # args == bib_datalist_modified[i]
 
 #%% Search matched papers and export the citation
 
-counter = 0
 outputpath = os.path.join(os.path.dirname(__file__), "%s.txt"%timestamp)
 
-if ExportOption == "yes":
-    file = open(outputpath, 'a')
+if BatchConvert == "yes":
+    print("----------------------------")
+    print("       Batch convert")
+    print("----------------------------")
 
-while counter < 1:
-    SearchWord = input("\nType the reference name\n(ex. Surname+2024/Surname&Surname2024/Surname2024)\n(type 'e' to exit; type 'list' to display database): ")
+    ConvertSource = open(TxtFileLocation, "r", encoding="utf-8")
 
-    if SearchWord == "e":
-        if ExportOption == "yes":
-            file.close()
-        sys.exit()
+    ConvertSource_list = re.findall(r"[a-zß-ÿĀ-ſ]+\d+|[a-zß-ÿĀ-ſ]+&[a-zß-ÿĀ-ſ]+\d+|[a-zß-ÿĀ-ſ]+\+\d+", ConvertSource.read().lower())
 
-    if SearchWord == "list":
-        print(*InLineCitations)
-        continue
+    if AlphabeticalSorting == "yes":
+        ConvertSource_list = sorted(ConvertSource_list)
+
+
+#%%
+    print("%i items read as input"% len(ConvertSource_list))
+
+    print("Converting......\n")
 
     CitationOutputs = []
 
-    for i in range(len(names)):
-        if InLineCitations[i] == SearchWord:
-            Output = CitationExport(SignConverter[AuthorStyle_list[1]].join(AuthorStyleConverter[AuthorStyle_list[0]][i]), **bib_datalist_modified[i])
+    SuccessCounter = 0
+    SubCounter = 0
+    HowManyAuthors = 0
 
-            if PlainConvert == "yes":
-                
-                Output = Output.replace("{", "")
-                Output = Output.replace("}", "")
-                for bf, af in PlainConverter.items():
-                     Output = Output.replace(bf, af)
+    for j in range(len(ConvertSource_list)):
+        
+        for i in range(len(names)):
+            if InLineCitations[i] == ConvertSource_list[j]:
+                Output = CitationExport(SignConverter[AuthorStyle_list[1]].join(AuthorStyleConverter[AuthorStyle_list[0]][i]), **bib_datalist_modified[i])
 
-            CitationOutputs.append(Output + "\n")
+                if PlainConvert == "yes":
+                    
+                    Output = Output.replace("{", "")
+                    Output = Output.replace("}", "")
+                    for bf, af in PlainConverter.items():
+                        Output = Output.replace(bf, af)
 
-    if not CitationOutputs:
-        print("\nNo matched results")
+                CitationOutputs.append(Output + "\n")
+                SubCounter += 1
 
-    else:
-        print(*CitationOutputs)
+        if SubCounter > 0:
+            SuccessCounter += 1
+            print(ConvertSource_list[j].lower() + ": " + str(SubCounter))
+        else:
+            print(ConvertSource_list[j].lower() + "--------------------------> Not found")
 
-        if ExportOption == "yes":
-            file.writelines(CitationOutputs)
+        SubCounter = 0
+
+    print("\n%i/%i items are successfully converted"% (SuccessCounter, len(ConvertSource_list)))
+
+    file = open(outputpath, 'a')
+    file.writelines(CitationOutputs)
+    file.close()
+
+
+
+#%%
+else:
+
+    print("----------------------------")
+    print("      Interactive mode")
+    print("----------------------------")
+
+    if ExportOption == "yes":
+        file = open(outputpath, 'a')
+
+    while True:
+        SearchWord = input("Type the reference name (case insensitive)\nex. surname+2024/surname&surname2024/surname2024\n(type 'e' to exit; type 'list' to display database): ")
+
+        if SearchWord.lower() == "e":
+            if ExportOption == "yes":
+                file.close()
+            sys.exit()
+
+        if SearchWord.lower() == "list":
+            
+            print(*sorted(InLineCitations))
+           
+            continue
+
+        CitationOutputs = []
+
+        for i in range(len(names)):
+            if InLineCitations[i] == SearchWord.lower():
+                Output = CitationExport(SignConverter[AuthorStyle_list[1]].join(AuthorStyleConverter[AuthorStyle_list[0]][i]), **bib_datalist_modified[i])
+
+                if PlainConvert == "yes":
+                    
+                    Output = Output.replace("{", "")
+                    Output = Output.replace("}", "")
+                    for bf, af in PlainConverter.items():
+                        Output = Output.replace(bf, af)
+
+                CitationOutputs.append(Output + "\n")
+
+        if not CitationOutputs:
+            print("\nNo matched results\n")
+
+        else:
+            print("")
+            print(*CitationOutputs)
+
+            if ExportOption == "yes":
+                file.writelines(CitationOutputs)
 
     
 

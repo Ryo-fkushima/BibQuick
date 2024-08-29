@@ -22,4 +22,6 @@ Ryo Fukushima
 
 ## Updates
 
-Aug 28, 2024: Export option and a function for converting TeX-specific expressions into plain text were added.
+Aug 29, 2024 (v0.3.0): Batch convert option was added.
+
+Aug 28, 2024 (v0.2.0): Export option and a function for converting TeX-specific expressions into plain text were added.
