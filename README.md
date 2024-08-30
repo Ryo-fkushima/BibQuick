@@ -1,4 +1,4 @@
-# **BibQuick: Citation export assistant**
+# **BibQuick: Citation export assistant (v1.0.0-beta)**
 
 ## Requirement
 
@@ -12,7 +12,7 @@ The script was tested on: Python 3.11.6 (pip3), macOS Ventura (13.6.7), MacBook 
 
 2. Prepare a bibtex file that includes the reference data (e.g., **list_20240821.bib**).
 
-3. Edit **BibQuickParams.ini** to set the path of the bibtex file and the citation style.
+3. Edit **BibQuickParams.ini** to set the path of the bibtex file (and input file) and the citation style.
 
 4. Move into the directory via your console and run **BibQuick.py**.
 
@@ -21,6 +21,8 @@ The script was tested on: Python 3.11.6 (pip3), macOS Ventura (13.6.7), MacBook 
 Ryo Fukushima
 
 ## Updates
+
+Aug 30, 2024 (v1.0.0-beta): Display option for many authors was added. Detailed documentations will be added soon!
 
 Aug 29, 2024 (v0.3.0): Batch convert option was added.
 

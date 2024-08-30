@@ -1,5 +1,5 @@
 #%%
-# BibQuick v0.3.0 (Aug 29, 2024)
+# BibQuick v1.0.0-beta (Aug 30, 2024)
 # Ryo Fukushima
 #
 import bibtexparser
@@ -30,29 +30,31 @@ BibtexLocation = config_ini["CurrentParameters"]["BibtexLocation"]
 ExportOption = config_ini["CurrentParameters"]["InteractiveExport"]
 CitationStyle = config_ini["CurrentParameters"]["CitationStyle"]
 AuthorStyle = config_ini["CurrentParameters"]["AuthorStyle"]
+ManyAuthors = config_ini["CurrentParameters"]["ManyAuthors"]
+ManyAuthorsOption = config_ini["CurrentParameters"]["ManyAuthorsOption"]
 YearPar = config_ini["CurrentParameters"]["YearPar"]
 TemplateName = config_ini["CurrentParameters"]["Template"]
 PlainConvert = config_ini["CurrentParameters"]["PlainConvert"]
-AlphabeticalSorting = config_ini["CurrentParameters"]["AlphabeticalSorting"]
+
 
 BatchConvert = config_ini["CurrentParameters"]["BatchConvert"]
 TxtFileLocation = config_ini["CurrentParameters"]["TxtFileLocation"]
-
+AlphabeticalSorting = config_ini["CurrentParameters"]["AlphabeticalSorting"]
 
 ##########
 
 SignConverter = {"s": " ", "p": ".", "c": ",", "cl": ":", "ps": ". ", "cs": ", ", "cls": ": ", "n": "", 
                  "ap": "&", "a": "and", "aps": "& ", "as": "and "}
 AuthorStyle_list = AuthorStyle.split(",")
+ManyAuthorsOption_list = ManyAuthorsOption.split(",")
 
 PlainConverter = {"--": "–", '\\"o': "ö", "\\'e": "é", "\\'a": "á", "\\v c": "č", '\\"u': "ü", '\\"a': "ä",
                   "\\v s": "š", "\\v r": "ř", "\\'\\i": "í","\\'u": "ú", "\\'o": "ó", "\\o":"ø", '\\"\\i': "ï", "\\aa": "å"}
-PlainConverter_Inv = dict(zip(PlainConverter.values(), PlainConverter.keys()))
 
 ##########
 # open the bibtex file (as dict)
 print("============================================================")
-print("             BibQuick v0.3.0 by Ryo Fukushima")
+print("                BibQuick v1.0.0-beta by RF")
 print("============================================================")
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 print("Session No. " + timestamp)
@@ -77,6 +79,8 @@ for i in range(len(bib_datalist)):
         "journal" in bib_datalist[i]):
         
         bib_datalist_modified.append(bib_datalist[i])
+        #names.append(bib_datalist[i]["author"].split(" and "))
+        bib_datalist[i]["author"] = " ".join(bib_datalist[i]["author"].split())
         names.append(bib_datalist[i]["author"].split(" and "))
         years.append(int(bib_datalist[i]["year"]))
 
@@ -237,6 +241,33 @@ def CitationExport(formattedauthor, **args): # args == bib_datalist_modified[i]
     return "".join(result)
 
 
+
+def AuthorFormat(listofname):
+
+    formatresult = []
+
+    if ManyAuthors == "yes":
+        if len(listofname) > int(ManyAuthorsOption_list[0]):
+            formatresult = SignConverter[AuthorStyle_list[1]].join(listofname[0:int(ManyAuthorsOption_list[1])])
+            formatresult += str(ManyAuthorsOption_list[2])
+        
+            if int(ManyAuthorsOption_list[3]) == 1:
+                formatresult += listofname[-1]
+                formatresult = formatresult.replace(SignConverter[andsign], "")
+
+        else:
+
+            formatresult = SignConverter[AuthorStyle_list[1]].join(listofname)
+
+    else:
+        #formatresult = SignConverter[AuthorStyle_list[1]].join(AuthorStyleConverter[AuthorStyle_list[0]][i])
+        formatresult = SignConverter[AuthorStyle_list[1]].join(listofname)
+
+    return formatresult
+
+
+
+
 #%% Search matched papers and export the citation
 
 outputpath = os.path.join(os.path.dirname(__file__), "%s.txt"%timestamp)
@@ -269,7 +300,8 @@ if BatchConvert == "yes":
         
         for i in range(len(names)):
             if InLineCitations[i] == ConvertSource_list[j]:
-                Output = CitationExport(SignConverter[AuthorStyle_list[1]].join(AuthorStyleConverter[AuthorStyle_list[0]][i]), **bib_datalist_modified[i])
+                #Output = CitationExport(SignConverter[AuthorStyle_list[1]].join(AuthorStyleConverter[AuthorStyle_list[0]][i]), **bib_datalist_modified[i])
+                Output = CitationExport(AuthorFormat(AuthorStyleConverter[AuthorStyle_list[0]][i]), **bib_datalist_modified[i])
 
                 if PlainConvert == "yes":
                     
@@ -325,7 +357,8 @@ else:
 
         for i in range(len(names)):
             if InLineCitations[i] == SearchWord.lower():
-                Output = CitationExport(SignConverter[AuthorStyle_list[1]].join(AuthorStyleConverter[AuthorStyle_list[0]][i]), **bib_datalist_modified[i])
+                #Output = CitationExport(SignConverter[AuthorStyle_list[1]].join(AuthorStyleConverter[AuthorStyle_list[0]][i]), **bib_datalist_modified[i])
+                Output = CitationExport(AuthorFormat(AuthorStyleConverter[AuthorStyle_list[0]][i]), **bib_datalist_modified[i])
 
                 if PlainConvert == "yes":
                     
