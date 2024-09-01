@@ -1,4 +1,4 @@
-# **BibQuick: Citation export assistant (v1.0.0-beta)**
+# **BibQuick: Citation export assistant (v1.0.0-beta2)**
 
 ## Requirement
 
@@ -21,6 +21,8 @@ The script was tested on: Python 3.11.6 (pip3), macOS Ventura (13.6.7), MacBook 
 Ryo Fukushima
 
 ## Updates
+
+Sep 02, 2024 (v1.0.0-beta2): Minor update
 
 Aug 30, 2024 (v1.0.0-beta): Display option for many authors was added. Detailed documentations will be added soon!
 

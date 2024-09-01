@@ -1,5 +1,5 @@
 #%%
-# BibQuick v1.0.0-beta (Aug 30, 2024)
+# BibQuick v1.0.0-beta2 (Sep 2, 2024)
 # Ryo Fukushima
 #
 import bibtexparser
@@ -29,10 +29,13 @@ config_ini.read(path, encoding="utf-8")
 BibtexLocation = config_ini["CurrentParameters"]["BibtexLocation"]
 ExportOption = config_ini["CurrentParameters"]["InteractiveExport"]
 CitationStyle = config_ini["CurrentParameters"]["CitationStyle"]
+AddLetters = config_ini["CurrentParameters"]["AddLetters"] 
 AuthorStyle = config_ini["CurrentParameters"]["AuthorStyle"]
 ManyAuthors = config_ini["CurrentParameters"]["ManyAuthors"]
 ManyAuthorsOption = config_ini["CurrentParameters"]["ManyAuthorsOption"]
+EtAlExpression = config_ini["CurrentParameters"]["EtAlExpression"]
 YearPar = config_ini["CurrentParameters"]["YearPar"]
+NoPar = config_ini["CurrentParameters"]["NoPar"]
 TemplateName = config_ini["CurrentParameters"]["Template"]
 PlainConvert = config_ini["CurrentParameters"]["PlainConvert"]
 
@@ -43,10 +46,12 @@ AlphabeticalSorting = config_ini["CurrentParameters"]["AlphabeticalSorting"]
 
 ##########
 
-SignConverter = {"s": " ", "p": ".", "c": ",", "cl": ":", "ps": ". ", "cs": ", ", "cls": ": ", "n": "", 
+SignConverter = {"s": " ", "p": ".", "c": ",", "cl": ":", "ps": ". ", "cs": ", ", "cls": ": ", "n": "", "sc": ";", "scs": "; ",
+                 "q": "'", "dq": '"',
                  "ap": "&", "a": "and", "aps": "& ", "as": "and "}
 AuthorStyle_list = AuthorStyle.split(",")
 ManyAuthorsOption_list = ManyAuthorsOption.split(",")
+AddLetters_list = AddLetters.split(",")
 
 PlainConverter = {"--": "–", '\\"o': "ö", "\\'e": "é", "\\'a": "á", "\\v c": "č", '\\"u': "ü", '\\"a': "ä",
                   "\\v s": "š", "\\v r": "ř", "\\'\\i": "í","\\'u": "ú", "\\'o": "ó", "\\o":"ø", '\\"\\i': "ï", "\\aa": "å"}
@@ -54,7 +59,7 @@ PlainConverter = {"--": "–", '\\"o': "ö", "\\'e": "é", "\\'a": "á", "\\v c"
 ##########
 # open the bibtex file (as dict)
 print("============================================================")
-print("                BibQuick v1.0.0-beta by RF")
+print("                BibQuick v1.0.0-beta2 by RF")
 print("============================================================")
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 print("Session No. " + timestamp)
@@ -116,15 +121,17 @@ for i in range(len(names)):
 
         firstnames[i][j] = firstnames[i][j].replace("-", " ")
 
-        firstnames[i][j] = re.sub("([A-Z])([A-Z])","\\1 \\2", firstnames[i][j])
-        firstnames[i][j] = re.sub("([A-Z])([A-Z])([A-Z])","\\1 \\2 \\3", firstnames[i][j])
-        firstnames[i][j] = re.sub("([A-Z])([A-Z])([A-Z])([A-Z])","\\1 \\2 \\3 \\4", firstnames[i][j])
-        firstnames[i][j] = re.sub("([A-Z])([A-Z])([A-Z])([A-Z])([A-Z])","\\1 \\2 \\3 \\4 \\5", firstnames[i][j])
 
-        firstnames[i][j] = re.sub("([A-Z])\.([A-Z])\.","\\1 \\2", firstnames[i][j])
-        firstnames[i][j] = re.sub("([A-Z])\.([A-Z])\.([A-Z])\.","\\1 \\2 \\3", firstnames[i][j])
-        firstnames[i][j] = re.sub("([A-Z])\.([A-Z])\.([A-Z])\.([A-Z])\.","\\1 \\2 \\3 \\4", firstnames[i][j])
+        firstnames[i][j] = re.sub("([A-Z])([A-Z])([A-Z])([A-Z])([A-Z])","\\1 \\2 \\3 \\4 \\5", firstnames[i][j])
+        firstnames[i][j] = re.sub("([A-Z])([A-Z])([A-Z])([A-Z])","\\1 \\2 \\3 \\4", firstnames[i][j])
+        firstnames[i][j] = re.sub("([A-Z])([A-Z])([A-Z])","\\1 \\2 \\3", firstnames[i][j])
+        firstnames[i][j] = re.sub("([A-Z])([A-Z])","\\1 \\2", firstnames[i][j])
+        
         firstnames[i][j] = re.sub("([A-Z])\.([A-Z])\.([A-Z])\.([A-Z])\.([A-Z])\.","\\1 \\2 \\3 \\4 \\5", firstnames[i][j])
+        firstnames[i][j] = re.sub("([A-Z])\.([A-Z])\.([A-Z])\.([A-Z])\.","\\1 \\2 \\3 \\4", firstnames[i][j])
+        firstnames[i][j] = re.sub("([A-Z])\.([A-Z])\.([A-Z])\.","\\1 \\2 \\3", firstnames[i][j])
+        firstnames[i][j] = re.sub("([A-Z])\.([A-Z])\.","\\1 \\2", firstnames[i][j])
+        
          
 # convert firstnames into initials 
 firstnames_I = copy.deepcopy(firstnames)
@@ -173,32 +180,39 @@ for i in range(len(names)):
 
 
 # make author expression
-SsF, SsI, ScI, ScsI = [], [], [], []
-FsS, IsS = [], []
+SsF, ScsF, SsI, ScsI = [], [], [], []
+FsS, FcsS, IsS, IcsS = [], [], [], []
 
 
 for i in range(len(names)):
     
     SsF.append([x + " " + y for (x, y) in zip(surnames_and[i], firstnames[i])])
     SsI.append([x + " " + y for (x, y) in zip(surnames_and[i], firstnames_I[i])])
-    ScI.append([x + "," + y for (x, y) in zip(surnames_and[i], firstnames_I[i])])
     ScsI.append([x + ", " + y for (x, y) in zip(surnames_and[i], firstnames_I[i])])
+    ScsF.append([x + ", " + y for (x, y) in zip(surnames_and[i], firstnames[i])])
     FsS.append([x + " " + y for (x, y) in zip(firstnames_and[i], surnames[i])])
+    FcsS.append([x + ", " + y for (x, y) in zip(firstnames_and[i], surnames[i])])
     IsS.append([x + " " + y for (x, y) in zip(firstnames_I_and[i], surnames[i])])
+    IcsS.append([x + ", " + y for (x, y) in zip(firstnames_I_and[i], surnames[i])])
 
 
 ##########
 # StyleConverter
 CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"pages", "U": "url", "D": "doi"}
-# A, Y, DL is implemented separately below
+# A, Y, N, DD, DL is implemented separately below
 
 AuthorStyleConverter = {
     "SsF": SsF,
+    "ScsF": ScsF,
+
     "SsI": SsI,
-    "ScI": ScI,
     "ScsI": ScsI,
+    
     "FsS": FsS,
+    "FcsS": FcsS,
+
     "IsS": IsS,
+    "IcsS": IcsS,
 }
 
 ##########
@@ -219,6 +233,24 @@ def CitationExport(formattedauthor, **args): # args == bib_datalist_modified[i]
             else:
                 result.append(args["year"])
 
+        if CitationStyle_list[i] == "N":
+            if ("number" in args) and (NoPar == "yes"):
+                result.append("(" + args["number"] + ")")
+            elif ("number" in args):
+                result.append(args["number"])
+            else:
+                result.append("")
+
+        if CitationStyle_list[i] == "DD":
+            if ("doi" in args) and ("doi:" not in args["doi"]) and ("https://doi.org/" not in args["doi"]):
+                result.append(args["doi"])
+            elif ("doi" in args) and ("https://doi.org/" in args["doi"]):
+                result.append(args["doi"].replace("https://doi.org/",""))
+            elif ("doi" in args) and ("doi:" in args["doi"]):
+                result.append(args["doi"].replace("doi:", ""))
+            else:
+                result.append("")
+
         if CitationStyle_list[i] == "DL":
             if ("doi" in args) and ("doi:" not in args["doi"]) and ("https://doi.org/" not in args["doi"]):
                 result.append("https://doi.org/" + args["doi"])
@@ -238,6 +270,9 @@ def CitationExport(formattedauthor, **args): # args == bib_datalist_modified[i]
         if CitationStyle_list[i] in SignConverter:
             result.append(SignConverter[CitationStyle_list[i]])
 
+        if CitationStyle_list[i].isdigit() == True:
+            result.append(AddLetters_list[int(CitationStyle_list[i])])
+
     return "".join(result)
 
 
@@ -249,9 +284,9 @@ def AuthorFormat(listofname):
     if ManyAuthors == "yes":
         if len(listofname) > int(ManyAuthorsOption_list[0]):
             formatresult = SignConverter[AuthorStyle_list[1]].join(listofname[0:int(ManyAuthorsOption_list[1])])
-            formatresult += str(ManyAuthorsOption_list[2])
+            formatresult += str(EtAlExpression)
         
-            if int(ManyAuthorsOption_list[3]) == 1:
+            if int(ManyAuthorsOption_list[2]) == 1:
                 formatresult += listofname[-1]
                 formatresult = formatresult.replace(SignConverter[andsign], "")
 
@@ -305,8 +340,17 @@ if BatchConvert == "yes":
 
                 if PlainConvert == "yes":
                     
+                    Output = Output.replace("\{", "@lp")
+                    Output = Output.replace("\}", "@rp")
                     Output = Output.replace("{", "")
                     Output = Output.replace("}", "")
+                    Output = Output.replace("$", "")
+                    Output = Output.replace("\mathrm", "")
+                    Output = Output.replace("\\rm", "")
+
+                    Output = Output.replace("@lp", "{")
+                    Output = Output.replace("@rp", "}")
+
                     for bf, af in PlainConverter.items():
                         Output = Output.replace(bf, af)
 
@@ -361,9 +405,18 @@ else:
                 Output = CitationExport(AuthorFormat(AuthorStyleConverter[AuthorStyle_list[0]][i]), **bib_datalist_modified[i])
 
                 if PlainConvert == "yes":
-                    
+
+                    Output = Output.replace("\{", "@lp")
+                    Output = Output.replace("\}", "@rp")
                     Output = Output.replace("{", "")
                     Output = Output.replace("}", "")
+                    Output = Output.replace("$", "")
+                    Output = Output.replace("\mathrm", "")
+                    Output = Output.replace("\\rm", "")
+
+                    Output = Output.replace("@lp", "{")
+                    Output = Output.replace("@rp", "}")
+
                     for bf, af in PlainConverter.items():
                         Output = Output.replace(bf, af)
 
