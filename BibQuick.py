@@ -1,5 +1,5 @@
 #%%
-# BibQuick v1.0.0-beta3 (Sep 04, 2024)
+# BibQuick v1.0.0 (Sep 05, 2024)
 # Ryo Fukushima
 #
 import bibtexparser
@@ -71,10 +71,10 @@ PlainConverter = {"--": "–",
                   "\\^\\i": "î",
                   "\\^\\I": "Î",
 
-                  "\\v c": "č", "\\v s": "š", "\\v r": "ř", "\\v g": "ğ",
-                  "\\v{c": "č", "\\v{s": "š", "\\v{r": "ř", "\\v{g": "ğ",
-                  "\\v C": "Č", "\\v S": "Š", "\\v R": "Ř", "\\v G": "Ğ",
-                  "\\v{C": "Č", "\\v{S": "Š", "\\v{R": "Ř", "\\v{G": "Ğ",
+                  "\\v c": "č", "\\v s": "š", "\\v r": "ř", "\\v g": "ğ", "\\v e": "ě", "\\v z": "ž",
+                  "\\v{c": "č", "\\v{s": "š", "\\v{r": "ř", "\\v{g": "ğ", "\\v{e": "ě", "\\v{z": "ž",
+                  "\\v C": "Č", "\\v S": "Š", "\\v R": "Ř", "\\v G": "Ğ", "\\v E": "Ě", "\\v Z": "Ž",
+                  "\\v{C": "Č", "\\v{S": "Š", "\\v{R": "Ř", "\\v{G": "Ğ", "\\v{E": "Ě", "\\v{Z": "Ž",
 
                   "\\c s" : "ş", "\\c c" : "ç",
                   "\\c{s" : "ş", "\\c{c" : "ç", 
@@ -97,7 +97,7 @@ CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"page
 ##### Start UI (session no. = timestamp) #####
 
 print("============================================================")
-print("                BibQuick v1.0.0-beta3 by RF")
+print("                  BibQuick v1.0.0 by RF")
 print("============================================================")
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 print("Session No. " + timestamp)
