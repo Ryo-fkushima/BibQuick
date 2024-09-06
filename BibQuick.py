@@ -1,5 +1,5 @@
 #%%
-# BibQuick v1.0.0 (Sep 05, 2024)
+# BibQuick v1.0.1 (Sep 07, 2024)
 # Ryo Fukushima
 #
 import bibtexparser
@@ -64,7 +64,7 @@ PlainConverter = {"--": "–",
  
                   "\\'e": "é", "\\'a": "á", "\\'\\i": "í","\\'u": "ú", "\\'o": "ó",
                   "\\'E": "É", "\\'A": "Á", "\\'\\I": "Í","\\'U": "Ú", "\\'O": "Ó",
-
+                  
                   "\\`e": "è", "\\`a": "à", "\\`\\i": "ì","\\`u": "ù", "\\`o": "ò",
                   "\\`E": "È", "\\`A": "À", "\\`\\I": "Ì","\\`U": "Ù", "\\`O": "Ò",
 
@@ -89,6 +89,11 @@ PlainConverter = {"--": "–",
                   "\\aa": "å",
                   "\\AA" : "Å",
 
+                  "\\l": "ł", "\\L": "Ł",
+
+                  "\\' c": "ć", "\\' C": "Ć",
+                  "\\'{c": "ć", "\\'{C": "Ć",
+
                   "\\copyright": "©", "\\&": "&", "\\%":"%", "\\textordmasculine": "°"}
 
 CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"pages", "U": "url", "D": "doi"}
@@ -97,7 +102,7 @@ CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"page
 ##### Start UI (session no. = timestamp) #####
 
 print("============================================================")
-print("                  BibQuick v1.0.0 by RF")
+print("                  BibQuick v1.0.1 by RF")
 print("============================================================")
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 print("Session No. " + timestamp)
