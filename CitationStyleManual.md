@@ -1,4 +1,4 @@
-# **Citation style manual (for BibQuick v1.0.x)**
+# **Citation style manual (for BibQuick v1.1.x)**
 
 ## Graphical abstract
 <img width = "800" src = "./graphicalabstract.png">
@@ -22,6 +22,8 @@ if you need, you can add any letters by using the `AddLetters` parameter. Type s
 * D: doi (raw data)
 * DD: doi (after doi:)
 * DL: doi (full link)
+* M: month
+* ID: BibTeX ID
 
 ### Sign
 * s: space ( )
@@ -49,7 +51,7 @@ if you need, you can add any letters by using the `AddLetters` parameter. Type s
 
    Author names' expression is controlled by the parameters of `AuthorStyle`, `ManyAuthors`, `ManyAuthorsOption`, and `EtAlExpression`.
 
-   * `AuthorStyle` is composed of 5 items (comma-delimited; *X1*,*x2*,*x3*,*x4*,*x5*). *X1* should be either of {SsF, ScsF, SsI, ScsI, FsS, FcsS, IsS, IcsS} to set a person's name expression. The uppercase letters (S, F, I) respectively mean surname, firstname, and initialized firstname. For the meaning of the lowercase letters, please refer to the sign list above. *x2* is a parameter to set the delimiter between authors. *x3* is the delimiter between multiple initial letters, and *x4* is the sign placed at the last of the initialized firstname of each person. *x5* is the sign before the last author's name. *x2*-*x5* should be chosen from the sign list above. 
+   * `AuthorStyle` is composed of 5 items (comma-delimited; *X1*,*x2*,*x3*,*x4*,*x5*). *X1* should be either of {S, SsF, ScsF, SsI, ScsI, FsS, FcsS, IsS, IcsS} to set a person's name expression. The uppercase letters (S, F, I) respectively mean surname, firstname, and initialized firstname. For the meaning of the lowercase letters, please refer to the sign list above. *x2* is a parameter to set the delimiter between authors. *x3* is the delimiter between multiple initial letters, and *x4* is the sign placed at the last of the initialized firstname of each person. *x5* is the sign before the last author's name. *x2*-*x5* should be chosen from the sign list above. 
   
    * If `ManyAuthors=yes`, the following settings for many authors will be applied.
    * `ManyAuthorsOption` is composed of 3 non-negative integers (comma-delimited; *n1*,*n2*,*n3*). If the total number of the authors is more than *n1*, only the first *n2* authors' names will be displayed. *n3* should be 1 or 0, and if *n3* = 1, the last author's name will also appear.
@@ -69,7 +71,7 @@ If `PlainConvert=yes`, all the letters will be converted from TeX-specific expre
 
 ## Note
 
-- There are two options for the doi block (DD, DL) to unambiguously fix the doi style.
+- There are two options for the doi block (DD, DL) to unambiguously fix the doi style. The DL option automatically convert http://dx.doi.org/ into https://doi.org/.
 - From **BibQuickParams.ini**, only parameter values in the `[CurrentParameters]` section will be imported. You can save your original template in **BibQuickParams.ini** by setting another section name.
 
 
