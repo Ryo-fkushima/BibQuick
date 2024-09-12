@@ -48,7 +48,7 @@ Once you have prepared the BibTeX database file, there are two options next: *in
    Template=APA
    ```
 
-4. Move into the directory via your console and run **BibQuick.py**, and follow the instructions appearing in the console. You can search papers by typing their contracted names (e.g., `fukushima+2024`) or by their BibTeX IDs (e.g., `@fukushima2024simulation`; `@` must be placed before the ID). If you set `InteractiveExport=yes`, you will finally get **[Session No].txt** in the directory.
+4. Move into the directory via your console and run **BibQuick.py**, and follow the instructions appearing in the console. You can search papers by typing their contracted names (e.g., `fukushima+2024`) or their BibTeX IDs (e.g., `@fukushima2024simulation`; `@` must be placed before the ID). If you set `InteractiveExport=yes`, you will finally get **[Session No].txt** in the directory.
 
    <img width = "600" src = "./fig2.png">
 
