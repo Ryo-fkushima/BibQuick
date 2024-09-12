@@ -1,4 +1,4 @@
-# **BibQuick: Citation export assistant (v1.0.1)**
+# **BibQuick: Citation export assistant (v1.1.0)**
 
 > *If you are struggling to prepare reference lists, try **BibQuick**!*
 
@@ -13,7 +13,9 @@ this program exports references with any citation style.
 
 2. Prepare a BibTeX file of the bibliographic information (e.g., **example_F24.bib**) and put it anywhere accessible.
 
-   Once you have prepared the BibTeX database file, there are two options next: *interactive mode* and *batch convert mode*:
+   <img width = "600" src = "./fig1.png">
+
+Once you have prepared the BibTeX database file, there are two options next: *interactive mode* and *batch convert mode*:
 
 ### i. Interactive mode
 
@@ -24,8 +26,31 @@ this program exports references with any citation style.
    * `BatchConvert` is the option to switch the interactive mode and batch convert mode. Here, set `no`. 
    * `AlphabeticalSorting` is the option for alphabetical sorting of the output when you set `BatchConvert=yes`. Here, this value is irrelevant.
    * Other parameters determine the citation style. Copy any template in **BibQuickParams.ini** and paste it inside the `CurrentParameters` section.
+   
+   For example:
+   ```
+   [CurrentParameters]
+   BibtexLocation=/Users/fukushimaryou/BibQuick/demo/example_F24.bib
+   InteractiveExport=no
+   ;
+   BatchConvert=no
+   AlphabeticalSorting=yes
+   ;
+   CitationStyle=A,s,Y,ps,T,ps,J,cs,V,N,cs,P,cs,DL,p
+   AddLetters=
+   AuthorStyle=ScsI,cs,ps,p,aps
+   ManyAuthors=yes
+   ManyAuthorsOption=20,19,1
+   EtAlExpression=@ . . . @
+   YearPar=yes
+   NoPar=yes
+   PlainConvert=yes
+   Template=APA
+   ```
 
-4. Move into the directory via your console and run **BibQuick.py**, and follow the instructions appearing in the console. You can search papers by typing their contracted names (e.g., `fukushima+2024`). If you set `InteractiveExport=yes`, you will finally get **[Session No].txt** in the directory.
+4. Move into the directory via your console and run **BibQuick.py**, and follow the instructions appearing in the console. You can search papers by typing their contracted names (e.g., `fukushima+2024`) or by their BibTeX IDs (e.g., `@fukushima2024simulation`; `@` must be placed before the ID). If you set `InteractiveExport=yes`, you will finally get **[Session No].txt** in the directory.
+
+   <img width = "600" src = "./fig2.png">
 
 ### ii. Batch convert from a .txt file
 
@@ -38,20 +63,62 @@ this program exports references with any citation style.
    * Set `BatchConvert` as `yes`. 
    * Set `AlphabeticalSorting` as `yes` or `no` according to your preference.
    * Other parameters: same as above
+  
+   For example:
+   ```
+   [CurrentParameters]
+   BibtexLocation=/Users/fukushimaryou/BibQuick/demo/example_F24.bib
+   InteractiveExport=no
+   ;
+   BatchConvert=yes
+   AlphabeticalSorting=yes
+   ;
+   CitationStyle=A,s,Y,ps,T,ps,J,cs,V,N,cs,P,cs,DL,p
+   AddLetters=
+   AuthorStyle=ScsI,cs,ps,p,aps
+   ManyAuthors=yes
+   ManyAuthorsOption=20,19,1
+   EtAlExpression=@ . . . @
+   YearPar=yes
+   NoPar=yes
+   PlainConvert=yes
+   Template=APA
+   ```
 
 5. Move into the directory via your console and run **BibQuick.py**. You will be asked the path to the input list. You can finally get **[Session No].txt** in the directory.
 
 ## Tips for preparing the BibTeX database file
 
-- One efficient option to get the BibTeX data is using the function of Google Scholar. You can copy the BibTeX information on the browser, and add it into your local .bib file. However, if you require DOIs, you'll have to access the journal website and add `doi` manually. **Note: when you add a new field on each article, don't forget to put commas between different fields!**
+- One option to get the BibTeX data is using the function of [Google Scholar](https://scholar.google.co.jp). You can copy the BibTeX information on the browser, and add it into your local .bib file. However, if you require DOIs, you'll have to access the journal website and add `doi` manually. **Note: when you add a new field on each article, don't forget to put commas between different fields!**
   
 - Another option is using some web service to get BibTeX from DOI (e.g., [doi2bib](https://www.doi2bib.org)).
   
 - From the BibTeX database, only bibliographic data of journals with `author`, `year` (as number), and `journal` fields will be successfully read. Other incomplete data will not be imported.
 
+- From v1.1.0, you can search papers by their BibTeX IDs. If you use [PubMed](https://pubmed.ncbi.nlm.nih.gov) to search papers, you can add PMID as a BibTeX ID when preparing the BibTeX database file. This enables to find papers by PMID.
+
+  For example:
+  ```
+  @article{37707320,
+  title = {Nanoscopic Elucidation of Spontaneous Self-Assembly of Severe Acute Respiratory Syndrome Coronavirus 2 (SARS-CoV-2) Open Reading Frame 6 (ORF6) Protein},
+  volume = {14},
+  ISSN = {1948-7185},
+  url = {http://dx.doi.org/10.1021/acs.jpclett.3c01440},
+  DOI = {10.1021/acs.jpclett.3c01440},
+  number = {38},
+  journal = {The Journal of Physical Chemistry Letters},
+  publisher = {American Chemical Society (ACS)},
+  author = {Nishide,  Goro and Lim,  Keesiang and Tamura,  Maiki and Kobayashi,  Akiko and Zhao,  Qingci and Hazawa,  Masaharu and Ando,  Toshio and Nishida,  Noritaka and Wong,  Richard W.},
+  year = {2023},
+  month = sep,
+  pages = {8385–8396}
+  }
+  ``` 
+
 ## Tips for preparing the input list for batch convert
 
 - In the batch convert mode, this program will search any strings of `[surname][year]` (1 author), `[surname1]&[surname2][year]` (2 authors), and `[surname]+[year]` (>3 authors) from the input list. Any space in the search word should be removed beforehand.
+- In addition, any string starting from `@` will be also read and used to search papers by their BibTeX IDs.
 
 ## Note
 
@@ -71,6 +138,8 @@ Ryo Fukushima (rpifukushima@gmail.com)
 
 ## Updates
 
-Sep 07, 2024 (v1.0.1): A few special characters were additionally implemented, and README was modified. 
+Sep 12, 2024 (v1.1.0): ID Search function was implemented. New blocks (M, ID) were added.
+
+Sep 07, 2024 (v1.0.1): A few special characters were additionally implemented. 
 
 Sep 05, 2024: v1.0.0 was released.

@@ -1,5 +1,5 @@
 #%%
-# BibQuick v1.0.1 (Sep 07, 2024)
+# BibQuick v1.1.0 (Sep 12, 2024)
 # Ryo Fukushima
 #
 import bibtexparser
@@ -31,7 +31,6 @@ PlainConvert = config_ini["CurrentParameters"]["PlainConvert"]
 
 
 BatchConvert = config_ini["CurrentParameters"]["BatchConvert"]
-#TxtFileLocation = config_ini["CurrentParameters"]["TxtFileLocation"]
 AlphabeticalSorting = config_ini["CurrentParameters"]["AlphabeticalSorting"]
 
 ##### Define some lists #####
@@ -48,7 +47,6 @@ AddLetters_list = AddLetters.split(",")
 PlainConverter = {"--": "–", 
                   
                   "\\alpha": "α","\\beta": "β","\\gamma": "γ","\\delta": "δ","\\epsilon": "ϵ",
-                  "\\varepsilon": "ε","\\zeta": "ζ","\\eta": "η","\\theta": "θ","\\vartheta": "ϑ",
                   "\\varepsilon": "ε","\\zeta": "ζ","\\eta": "η","\\theta": "θ","\\vartheta": "ϑ",
                   "\\iota": "ι","\\kappa": "κ","\\lambda": "λ","\\mu": "μ","\\nu": "ν",
                   "\\xi": "ξ","\\pi": "π","\\varpi": "ϖ","\\rho": "ρ","\\varrho": "ϱ",
@@ -91,18 +89,22 @@ PlainConverter = {"--": "–",
 
                   "\\l": "ł", "\\L": "Ł",
 
-                  "\\' c": "ć", "\\' C": "Ć",
+                  "\\'c": "ć", "\\'C": "Ć",
                   "\\'{c": "ć", "\\'{C": "Ć",
+
+                  "\\~n": "ñ", "\\~N": "Ñ",
+                  "\\~{n": "ñ", "\\~{N": "Ñ",
 
                   "\\copyright": "©", "\\&": "&", "\\%":"%", "\\textordmasculine": "°"}
 
-CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"pages", "U": "url", "D": "doi"}
+CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"pages", "U": "url", "D": "doi", "M": "month", "ID": "ID"}
 # A, Y, N, DD, DL is implemented separately in the CitationExport function
 
 ##### Start UI (session no. = timestamp) #####
 
-print("============================================================")
-print("                  BibQuick v1.0.1 by RF")
+print("============================================================\n")
+print("                     BibQuick v1.1.0")
+print(" Repository URL: https://github.com/Ryo-fkushima/BibQuick   \n")
 print("============================================================")
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 print("Session No. " + timestamp)
@@ -207,6 +209,7 @@ for i in range(len(names)):
 ##### Make a list for search and insert & before the last author #####
 
 InLineCitations = []                            # list for search (e.g., fukushima+2024)
+IDs = []                            # list for ID search
 surnames_and = copy.deepcopy(surnames)          # xxx_and: those with & before the last author's name
 firstnames_and = copy.deepcopy(firstnames)
 firstnames_I_and = copy.deepcopy(firstnames_I)
@@ -230,12 +233,17 @@ for i in range(len(names)):
 
     InLineCitations[i] = InLineCitations[i].lower()            # lowercase for the search list
     InLineCitations[i] = InLineCitations[i].replace(" ","")    # van keken+2002 -> vankeken+2002
+
+    IDs.append(bib_datalist_modified[i]["ID"])   
+    IDs[i] = "@" + IDs[i].lower()
+
                  
 
 ##### Make lists of authors' names #####
 
 SsF, ScsF, SsI, ScsI = [], [], [], []
 FsS, FcsS, IsS, IcsS = [], [], [], []
+S = surnames_and
 
 
 for i in range(len(names)):
@@ -262,6 +270,8 @@ AuthorStyleConverter = {
 
     "IsS": IsS,
     "IcsS": IcsS,
+
+    "S": S,
 }
 
 ##### Main function to export reference #####
@@ -270,8 +280,8 @@ def CitationExport(formattedauthor, **args):        # args == bib_datalist_modif
 
     result = []
 
-    for i in range(len(CitationStyle_list)):        # A option 
-        if CitationStyle_list[i] == "A":
+    for i in range(len(CitationStyle_list)):         
+        if CitationStyle_list[i] == "A":           # A option
             result.append(formattedauthor)
         
         if CitationStyle_list[i] == "Y":            # Y option 
@@ -289,20 +299,24 @@ def CitationExport(formattedauthor, **args):        # args == bib_datalist_modif
                 result.append("")
 
         if CitationStyle_list[i] == "DD":           # DD option (DOI as a real doi)
-            if ("doi" in args) and ("doi:" not in args["doi"]) and ("https://doi.org/" not in args["doi"]):
+            if ("doi" in args) and ("doi:" not in args["doi"]) and ("doi.org/" not in args["doi"]):
                 result.append(args["doi"])
             elif ("doi" in args) and ("https://doi.org/" in args["doi"]):
                 result.append(args["doi"].replace("https://doi.org/",""))
+            elif ("doi" in args) and ("http://dx.doi.org/" in args["doi"]):
+                result.append(args["doi"].replace("http://dx.doi.org/",""))
             elif ("doi" in args) and ("doi:" in args["doi"]):
                 result.append(args["doi"].replace("doi:", ""))
             else:
                 result.append("")
 
         if CitationStyle_list[i] == "DL":           # DL option (DOI as a link)
-            if ("doi" in args) and ("doi:" not in args["doi"]) and ("https://doi.org/" not in args["doi"]):
+            if ("doi" in args) and ("doi:" not in args["doi"]) and ("doi.org/" not in args["doi"]):
                 result.append("https://doi.org/" + args["doi"])
             elif ("doi" in args) and ("https://doi.org/" in args["doi"]):
                 result.append(args["doi"])
+            elif ("doi" in args) and ("http://dx.doi.org" in args["doi"]):
+                result.append(args["doi"].replace("http://dx.doi.org", "https://doi.org/"))
             elif ("doi" in args) and ("doi:" in args["doi"]):
                 result.append("https://doi.org/" + args["doi"].replace("doi:", ""))
             else:
@@ -362,10 +376,10 @@ if BatchConvert == "yes":
 
     ConvertSource = open(TxtFileLocation, "r", encoding="utf-8")
 
-    ConvertSource_list = re.findall(r"[a-zß-ÿĀ-ſ]+\d+|[a-zß-ÿĀ-ſ]+&[a-zß-ÿĀ-ſ]+\d+|[a-zß-ÿĀ-ſ]+\+\d+", ConvertSource.read().lower())
+    ConvertSource_list = re.findall(r"[a-zß-ÿĀ-ſ]+\d{4}+|[a-zß-ÿĀ-ſ]+&[a-zß-ÿĀ-ſ]+\d{4}+|[a-zß-ÿĀ-ſ]+\+\d{4}+|@+\S+", ConvertSource.read().lower())
 
-    if AlphabeticalSorting == "yes":
-        ConvertSource_list = sorted(ConvertSource_list)
+    #if AlphabeticalSorting == "yes":
+     #   ConvertSource_list = sorted(ConvertSource_list)
 
 
 #%%
@@ -381,7 +395,7 @@ if BatchConvert == "yes":
     for j in range(len(ConvertSource_list)):
         
         for i in range(len(names)):
-            if InLineCitations[i] == ConvertSource_list[j]:
+            if (InLineCitations[i] == ConvertSource_list[j]) or (IDs[i] == ConvertSource_list[j]):
                 
                 Output = CitationExport(AuthorFormat(AuthorStyleConverter[AuthorStyle_list[0]][i]), **bib_datalist_modified[i])
                 Output = Output.replace("@", "") # @ was first introduced to allow EtAlExpression to start/end with spaces, but removed here
@@ -411,13 +425,16 @@ if BatchConvert == "yes":
 
         if SubCounter > 0:
             SuccessCounter += 1
-            print(ConvertSource_list[j].lower() + ": " + str(SubCounter))
+            print(ConvertSource_list[j].lower() + " : " + str(SubCounter))
         else:
-            print(ConvertSource_list[j].lower() + "--------------------------> Not found")
+            print(ConvertSource_list[j].lower() + " --------------------------> Not found")
 
         SubCounter = 0
 
     print("\n%i/%i items are successfully converted"% (SuccessCounter, len(ConvertSource_list)))
+
+    if AlphabeticalSorting == "yes":
+        CitationOutputs = sorted(CitationOutputs)
 
     file = open(outputpath, 'a')
     file.writelines(CitationOutputs)
@@ -437,9 +454,9 @@ else:
         file = open(outputpath, 'a')
 
     while True:
-        SearchWord = input("Type the reference name (case insensitive)\nex. surname+2024/surname&surname2024/surname2024\n(type 'e' to exit; type 'list' to display database): ")
+        SearchWord = input("\nType the reference name or @ID (case insensitive)\nex. surname+2024/surname&surname2024/surname2024\n(type 'e' to exit; type 'list' or 'idlist' to display database): ")
         SearchWord = SearchWord.strip()
-
+        
         if SearchWord.lower() == "e":
             if ExportOption == "yes":
                 file.close()
@@ -451,10 +468,18 @@ else:
            
             continue
 
+        if SearchWord.lower() == "idlist":
+            
+            print(*sorted(IDs))
+           
+            continue
+        
+
         CitationOutputs = []
 
         for i in range(len(names)):
-            if InLineCitations[i] == SearchWord.lower():
+
+            if (InLineCitations[i] == SearchWord.lower()) or (IDs[i] == SearchWord.lower()):
                 
                 Output = CitationExport(AuthorFormat(AuthorStyleConverter[AuthorStyle_list[0]][i]), **bib_datalist_modified[i])
                 Output = Output.replace("@", "")
