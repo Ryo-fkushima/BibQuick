@@ -376,7 +376,7 @@ if BatchConvert == "yes":
 
     ConvertSource = open(TxtFileLocation, "r", encoding="utf-8")
 
-    ConvertSource_list = re.findall(r"[a-zß-ÿĀ-ſ]+\d{4}+|[a-zß-ÿĀ-ſ]+&[a-zß-ÿĀ-ſ]+\d{4}+|[a-zß-ÿĀ-ſ]+\+\d{4}+|@+\S+", ConvertSource.read().lower())
+    ConvertSource_list = re.findall(r"[a-zß-ÿĀ-ſ]+\d{4}|[a-zß-ÿĀ-ſ]+&[a-zß-ÿĀ-ſ]+\d{4}|[a-zß-ÿĀ-ſ]+\+\d{4}|@+\S+", ConvertSource.read().lower())
 
     #if AlphabeticalSorting == "yes":
      #   ConvertSource_list = sorted(ConvertSource_list)
