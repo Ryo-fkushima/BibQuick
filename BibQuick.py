@@ -1,5 +1,5 @@
 #%%
-# BibQuick v1.1.0 (Sep 12, 2024)
+# BibQuick v1.1.1 (Sep 17, 2024)
 # Ryo Fukushima
 #
 import bibtexparser
@@ -103,7 +103,7 @@ CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"page
 ##### Start UI (session no. = timestamp) #####
 
 print("============================================================\n")
-print("                     BibQuick v1.1.0")
+print("                     BibQuick v1.1.1")
 print(" Repository URL: https://github.com/Ryo-fkushima/BibQuick   \n")
 print("============================================================")
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -376,7 +376,7 @@ if BatchConvert == "yes":
 
     ConvertSource = open(TxtFileLocation, "r", encoding="utf-8")
 
-    ConvertSource_list = re.findall(r"[a-zß-ÿĀ-ſ]+\d{4}|[a-zß-ÿĀ-ſ]+&[a-zß-ÿĀ-ſ]+\d{4}|[a-zß-ÿĀ-ſ]+\+\d{4}|@+\S+", ConvertSource.read().lower())
+    ConvertSource_list = re.findall(r"[\-a-zß-ÿĀ-ſ]+\d{4}|[\-a-zß-ÿĀ-ſ]+&[\-a-zß-ÿĀ-ſ]+\d{4}|[\-a-zß-ÿĀ-ſ]+\+\d{4}|@+\S+", ConvertSource.read().lower())
 
     #if AlphabeticalSorting == "yes":
      #   ConvertSource_list = sorted(ConvertSource_list)
