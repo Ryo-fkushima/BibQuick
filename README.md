@@ -1,4 +1,4 @@
-# **BibQuick: Citation export assistant (v1.1.0)**
+# **BibQuick: Citation export assistant (v1.1.1)**
 
 > *If you are struggling to prepare reference lists, try **BibQuick**!*
 
@@ -54,7 +54,7 @@ Once you have prepared the BibTeX database file, there are two options next: *in
 
 ### ii. Batch convert from a .txt file
 
-3. Prepare a .txt file that includes the input list (e.g., **batch_example.txt**) and put it anywhere accessible.
+3. Prepare a .txt file that includes the input list (e.g., **batch_example.txt**, **batch_example2.txt**) and put it anywhere accessible.
 
 4. Edit `CurrentParameters` in **BibQuickParams.ini** as follows:
    
@@ -95,7 +95,7 @@ Once you have prepared the BibTeX database file, there are two options next: *in
   
 - From the BibTeX database, only bibliographic data of journals with `author`, `year` (as number), and `journal` fields will be successfully read. Other incomplete data will not be imported.
 
-- From v1.1.0, you can search papers by their BibTeX IDs. If you use [PubMed](https://pubmed.ncbi.nlm.nih.gov) to search papers, you can add PMID as a BibTeX ID when preparing the BibTeX database file. This enables to find papers by PMID.
+- From v1.1.0, you can search papers by their BibTeX IDs. If you use [PubMed](https://pubmed.ncbi.nlm.nih.gov) to search papers, you can add PMID as a BibTeX ID when preparing the BibTeX database file. This enables to find papers by @PMID.
 
   For example:
   ```
@@ -137,6 +137,8 @@ The script was tested on: Python 3.11.6/3.8.18 (macOS Ventura, MacBook Air 2020 
 Ryo Fukushima (rpifukushima@gmail.com)
 
 ## Updates
+
+Sep 17, 2024 (v1.1.1): Bug fixed. (Surnames with a hyphen are now correctly read in the batch convert mode.)
 
 Sep 12, 2024 (v1.1.0): ID Search function was implemented. New blocks (M, ID) were added.
 
