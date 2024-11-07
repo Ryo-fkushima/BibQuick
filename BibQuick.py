@@ -1,5 +1,5 @@
 #%%
-# BibQuick v1.1.1 (Sep 17, 2024)
+# BibQuick v1.1.2 (Nov 07, 2024)
 # Ryo Fukushima
 #
 import bibtexparser
@@ -95,6 +95,9 @@ PlainConverter = {"--": "–",
                   "\\~n": "ñ", "\\~N": "Ñ",
                   "\\~{n": "ñ", "\\~{N": "Ñ",
 
+                  "\\'n": "ń", "\\'N": "Ń",
+                  "\\'{n": "ń", "\\'{N": "Ń",
+
                   "\\copyright": "©", "\\&": "&", "\\%":"%", "\\textordmasculine": "°"}
 
 CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"pages", "U": "url", "D": "doi", "M": "month", "ID": "ID"}
@@ -103,7 +106,7 @@ CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"page
 ##### Start UI (session no. = timestamp) #####
 
 print("============================================================\n")
-print("                     BibQuick v1.1.1")
+print("                     BibQuick v1.1.2")
 print(" Repository URL: https://github.com/Ryo-fkushima/BibQuick   \n")
 print("============================================================")
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -112,7 +115,7 @@ print("Loading database......")
 
 ##### Open bibtex database as dict (bib_database) #####
 
-with open(BibtexLocation) as bibtex_file:
+with open(BibtexLocation, encoding="utf-8") as bibtex_file:
     bib_database = bibtexparser.load(bibtex_file)
 
 ##### Make editable list from bib_database (bib_datalist) #####
@@ -436,7 +439,7 @@ if BatchConvert == "yes":
     if AlphabeticalSorting == "yes":
         CitationOutputs = sorted(CitationOutputs)
 
-    file = open(outputpath, 'a')
+    file = open(outputpath, 'a', encoding="utf-8")
     file.writelines(CitationOutputs)
     file.close()
 
@@ -451,7 +454,7 @@ else:
     print("----------------------------")
 
     if ExportOption == "yes":
-        file = open(outputpath, 'a')
+        file = open(outputpath, 'a', encoding="utf-8")
 
     while True:
         SearchWord = input("\nType the reference name or @ID (case insensitive)\nex. surname+2024/surname&surname2024/surname2024\n(type 'e' to exit; type 'list' or 'idlist' to display database): ")

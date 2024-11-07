@@ -1,4 +1,4 @@
-# **BibQuick: Citation export assistant (v1.1.1)**
+# **BibQuick: Citation export assistant (v1.1.2)**
 
 > *If you are struggling to prepare reference lists, try **BibQuick**!*
 
@@ -138,7 +138,9 @@ Ryo Fukushima (rpifukushima@gmail.com)
 
 ## Updates
 
-Sep 17, 2024 (v1.1.1): Bug fixed. (Surnames with a hyphen are now correctly read in the batch convert mode.)
+Nov 07, 2024 (v1.1.2): Bug fixed for Windows OS and special characters were additionaly implemented.
+
+Sep 17, 2024 (v1.1.1): Bug fixed. Surnames with a hyphen are now correctly read in the batch convert mode.
 
 Sep 12, 2024 (v1.1.0): ID Search function was implemented. New blocks (M, ID) were added.
 
