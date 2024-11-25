@@ -1,9 +1,11 @@
-# **BibQuick: Citation export assistant (v1.1.2)**
+# **BibQuick: Citation export assistant (v1.1.3)**
 
 > *If you are struggling to prepare reference lists, try **BibQuick**!*
 
 **BibQuick** is a python-based citation export assistant. From a BibTeX file that includes bibliographic information, 
 this program exports references with any citation style.
+
+**BibQuick**は、BibTeXファイルから引用文献リストをテキストで出力するPythonツールです。普段文献管理ソフトを使用しない方々向けに、英語論文執筆時の引用文献リスト出力のみに特化して開発しました。
 
 ## How to use
 
@@ -137,6 +139,8 @@ The script was tested on: Python 3.11.6/3.8.18 (macOS Ventura, MacBook Air 2020 
 Ryo Fukushima (rpifukushima@gmail.com)
 
 ## Updates
+
+Nov 25, 2024 (v1.1.3): Bug fixed for the AlphabeticalSorting option and special characters were additionaly implemented.
 
 Nov 07, 2024 (v1.1.2): Bug fixed for Windows OS and special characters were additionaly implemented.
 

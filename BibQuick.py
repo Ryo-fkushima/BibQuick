@@ -1,5 +1,5 @@
 #%%
-# BibQuick v1.1.2 (Nov 07, 2024)
+# BibQuick v1.1.3 (Nov 25, 2024)
 # Ryo Fukushima
 #
 import bibtexparser
@@ -95,6 +95,9 @@ PlainConverter = {"--": "–",
                   "\\~n": "ñ", "\\~N": "Ñ",
                   "\\~{n": "ñ", "\\~{N": "Ñ",
 
+                  "\\~a": "ã", "\\~A": "Ã",
+                  "\\~{a": "ã", "\\~{A": "Ã",
+
                   "\\'n": "ń", "\\'N": "Ń",
                   "\\'{n": "ń", "\\'{N": "Ń",
 
@@ -106,7 +109,7 @@ CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"page
 ##### Start UI (session no. = timestamp) #####
 
 print("============================================================\n")
-print("                     BibQuick v1.1.2")
+print("                     BibQuick v1.1.3")
 print(" Repository URL: https://github.com/Ryo-fkushima/BibQuick   \n")
 print("============================================================")
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -437,7 +440,7 @@ if BatchConvert == "yes":
     print("\n%i/%i items are successfully converted"% (SuccessCounter, len(ConvertSource_list)))
 
     if AlphabeticalSorting == "yes":
-        CitationOutputs = sorted(CitationOutputs)
+        CitationOutputs = sorted(CitationOutputs, key=str.lower)
 
     file = open(outputpath, 'a', encoding="utf-8")
     file.writelines(CitationOutputs)
