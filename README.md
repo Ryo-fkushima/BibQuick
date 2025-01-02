@@ -1,4 +1,4 @@
-# **BibQuick: Citation export assistant (v1.1.3)**
+# **BibQuick: Citation export assistant (v1.1.4)**
 
 > *If you are struggling to prepare reference lists, try **BibQuick**!*
 
@@ -97,7 +97,7 @@ Once you have prepared the BibTeX database file, there are two options next: *in
   
 - From the BibTeX database, only bibliographic data of journals with `author`, `year` (as number), and `journal` fields will be successfully read. Other incomplete data will not be imported.
 
-- From v1.1.0, you can search papers by their BibTeX IDs. If you use [PubMed](https://pubmed.ncbi.nlm.nih.gov) to search papers, you can add PMID as a BibTeX ID when preparing the BibTeX database file. This enables to find papers by @PMID.
+- You can search papers by their BibTeX IDs. If you use [PubMed](https://pubmed.ncbi.nlm.nih.gov) to search papers, you can add PMID as a BibTeX ID when preparing the BibTeX database file. This enables to find papers by @PMID.
 
   For example:
   ```
@@ -139,6 +139,8 @@ The script was tested on: Python 3.11.6/3.8.18 (macOS Ventura, MacBook Air 2020 
 Ryo Fukushima (rpifukushima@gmail.com)
 
 ## Updates
+
+Jan 02, 2025 (v1.1.4): Bug fixed. Surnames with apostrophes are now correctly read in the batch convert mode.
 
 Nov 25, 2024 (v1.1.3): Bug fixed for the AlphabeticalSorting option and special characters were additionaly implemented.
 
