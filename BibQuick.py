@@ -1,5 +1,5 @@
 #%%
-# BibQuick v1.1.4 (Jan 02, 2025)
+# BibQuick v1.2.0 (Nov 25, 2025)
 # Ryo Fukushima
 #
 import bibtexparser
@@ -13,6 +13,22 @@ import datetime
 ##### Read parameter values from BibQuickParams.ini #####
 
 config_ini = configparser.ConfigParser()
+
+default_configs = {"CurrentParameters":{
+                                        "AddLetters":"",
+                                        "LastDelimiterIgnore":"no",
+                                        "ManyAuthors":"no",
+                                        "ManyAuthorsOption":"",
+                                        "EtAlExpression":"",
+                                        "YearPar":"yes",
+                                        "NoPar":"yes",
+                                        "Template":"",
+                                        "PlainConvert":"yes", 
+                                        }  
+                   }
+
+config_ini.read_dict(default_configs)
+
 path = os.path.join(os.path.dirname(__file__), "BibQuickParams.ini")
 config_ini.read(path, encoding="utf-8")
 
@@ -21,6 +37,7 @@ ExportOption = config_ini["CurrentParameters"]["InteractiveExport"]
 CitationStyle = config_ini["CurrentParameters"]["CitationStyle"]
 AddLetters = config_ini["CurrentParameters"]["AddLetters"] 
 AuthorStyle = config_ini["CurrentParameters"]["AuthorStyle"]
+LastDelimiterIgnore = config_ini["CurrentParameters"]["LastDelimiterIgnore"]
 ManyAuthors = config_ini["CurrentParameters"]["ManyAuthors"]
 ManyAuthorsOption = config_ini["CurrentParameters"]["ManyAuthorsOption"]
 EtAlExpression = config_ini["CurrentParameters"]["EtAlExpression"]
@@ -37,7 +54,8 @@ AlphabeticalSorting = config_ini["CurrentParameters"]["AlphabeticalSorting"]
 
 SignConverter = {"s": " ", "p": ".", "c": ",", "cl": ":", "ps": ". ", "cs": ", ", "cls": ": ", "n": "", "sc": ";", "scs": "; ",
                  "q": "'", "dq": '"',
-                 "ap": "&", "a": "and", "aps": "& ", "as": "and ", "bsap": "\&", "bsaps": "\& "}
+                 "ap": "&", "a": "and", "aps": "& ", "as": "and ", "bsap": "\&", "bsaps": "\& ",
+                 "sap": " &", "sa": " and", "saps": " & ", "sas": " and ", "sbsap": " \&", "sbsaps": " \& "}
 
 CitationStyle_list = CitationStyle.split(",")
 AuthorStyle_list = AuthorStyle.split(",")
@@ -101,7 +119,7 @@ PlainConverter = {"--": "–",
                   "\\'n": "ń", "\\'N": "Ń",
                   "\\'{n": "ń", "\\'{N": "Ń",
 
-                  "\\copyright": "©", "\\&": "&", "\\%":"%", "\\textordmasculine": "°"}
+                  "\\copyright": "©", "\\textcopyright": "©", "\\&": "&", "\\%":"%", "\\textordmasculine": "°"}
 
 CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"pages", "U": "url", "D": "doi", "M": "month", "ID": "ID"}
 # A, Y, N, DD, DL is implemented separately in the CitationExport function
@@ -109,7 +127,7 @@ CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"page
 ##### Start UI (session no. = timestamp) #####
 
 print("============================================================\n")
-print("                     BibQuick v1.1.4")
+print("                     BibQuick v1.2.0")
 print(" Repository URL: https://github.com/Ryo-fkushima/BibQuick   \n")
 print("============================================================")
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -348,18 +366,16 @@ def AuthorFormat(listofname):
 
     formatresult = []
 
-    if ManyAuthors == "yes":
-        if len(listofname) > int(ManyAuthorsOption_list[0]):
-            formatresult = SignConverter[AuthorStyle_list[1]].join(listofname[0:int(ManyAuthorsOption_list[1])])
-            formatresult += str(EtAlExpression)
+    if (ManyAuthors == "yes") and (len(listofname) > int(ManyAuthorsOption_list[0])):
+        formatresult = SignConverter[AuthorStyle_list[1]].join(listofname[0:int(ManyAuthorsOption_list[1])])
+        formatresult += str(EtAlExpression)
             
-            if int(ManyAuthorsOption_list[2]) == 1:
-                formatresult += listofname[-1].replace(SignConverter[andsign], "")
+        if int(ManyAuthorsOption_list[2]) == 1:
+            formatresult += listofname[-1].replace(SignConverter[andsign], "")
 
-        else:
-
-            formatresult = SignConverter[AuthorStyle_list[1]].join(listofname)
-
+    elif LastDelimiterIgnore == "yes":
+        formatresult = SignConverter[AuthorStyle_list[1]].join(listofname[0:-1])
+        formatresult += listofname[-1]
     else:
         formatresult = SignConverter[AuthorStyle_list[1]].join(listofname)
 
@@ -444,6 +460,8 @@ if BatchConvert == "yes":
 
     file = open(outputpath, 'a', encoding="utf-8")
     file.writelines(CitationOutputs)
+    print("\nThe result has been exported to",outputpath,"\n")
+
     file.close()
 
 
@@ -466,6 +484,7 @@ else:
         if SearchWord.lower() == "e":
             if ExportOption == "yes":
                 file.close()
+                print("\nThe result has been exported to",outputpath,"\n")
             sys.exit()
 
         if SearchWord.lower() == "list":
