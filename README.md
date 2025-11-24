@@ -1,4 +1,4 @@
-# **BibQuick: Citation export assistant (v1.1.4)**
+# **BibQuick: Citation export assistant (v1.2.0)**
 
 > *If you are struggling to prepare reference lists, try **BibQuick**!*
 
@@ -41,6 +41,7 @@ Once you have prepared the BibTeX database file, there are two options next: *in
    CitationStyle=A,s,Y,ps,T,ps,J,cs,V,N,cs,P,cs,DL,p
    AddLetters=
    AuthorStyle=ScsI,cs,ps,p,aps
+   LastDelimiterIgnore=no
    ManyAuthors=yes
    ManyAuthorsOption=20,19,1
    EtAlExpression=@ . . . @
@@ -78,6 +79,7 @@ Once you have prepared the BibTeX database file, there are two options next: *in
    CitationStyle=A,s,Y,ps,T,ps,J,cs,V,N,cs,P,cs,DL,p
    AddLetters=
    AuthorStyle=ScsI,cs,ps,p,aps
+   LastDelimiterIgnore=no
    ManyAuthors=yes
    ManyAuthorsOption=20,19,1
    EtAlExpression=@ . . . @
@@ -132,13 +134,15 @@ Once you have prepared the BibTeX database file, there are two options next: *in
 
 Required module: [bibtexparser](https://pypi.org/project/bibtexparser/) (tested with v1.4.1)
 
-The script was tested on: Python 3.11.6/3.8.18 (macOS Ventura, MacBook Air 2020 with Intel CPU), and Python 3.9.13 (Windows 11, Minisforum EliteMini X500 with AMD Ryzen CPU).
+The script was tested on: Python 3.11.6/3.8.18 (macOS Sequoia, MacBook Air 2020 with Intel CPU), and Python 3.9.13 (Windows 11, Minisforum EliteMini X500 with AMD Ryzen CPU).
 
 ## Author
 
 Ryo Fukushima (rpifukushima@gmail.com)
 
 ## Updates
+
+Nov 25, 2025 (v1.2.0): Minor update. A new parameter (LastDelimiterIgnore) has been introduced to remove a delimiter before the final author.
 
 Jan 02, 2025 (v1.1.4): Bug fixed. Surnames with apostrophes are now correctly read in the batch convert mode.
 
