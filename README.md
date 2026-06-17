@@ -1,4 +1,4 @@
-# **BibQuick: Citation export assistant (v1.2.0)**
+# **BibQuick: Citation export assistant (v1.2.1)**
 
 > *If you are struggling to prepare reference lists, try **BibQuick**!*
 
@@ -134,13 +134,15 @@ Once you have prepared the BibTeX database file, there are two options next: *in
 
 Required module: [bibtexparser](https://pypi.org/project/bibtexparser/) (tested with v1.4.1)
 
-The script was tested on: Python 3.11.6/3.8.18 (macOS Sequoia, MacBook Air 2020 with Intel CPU), and Python 3.9.13 (Windows 11, Minisforum EliteMini X500 with AMD Ryzen CPU).
+The script was tested on: Python 3.11.15 (macOS Tahoe).
 
 ## Author
 
 Ryo Fukushima (rpifukushima@gmail.com)
 
 ## Updates
+
+Jun 17, 2026 (v1.2.1): A few special characters were additionally implemented. 
 
 Nov 25, 2025 (v1.2.0): Minor update. A new parameter (LastDelimiterIgnore) has been introduced to remove a delimiter before the final author.
 

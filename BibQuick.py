@@ -1,5 +1,5 @@
 #%%
-# BibQuick v1.2.0 (Nov 25, 2025)
+# BibQuick v1.2.1 (Jun 17, 2026)
 # Ryo Fukushima
 #
 import bibtexparser
@@ -84,8 +84,8 @@ PlainConverter = {"--": "–",
                   "\\`e": "è", "\\`a": "à", "\\`\\i": "ì","\\`u": "ù", "\\`o": "ò",
                   "\\`E": "È", "\\`A": "À", "\\`\\I": "Ì","\\`U": "Ù", "\\`O": "Ò",
 
-                  "\\^\\i": "î",
-                  "\\^\\I": "Î",
+                  "\\^e": "ê", "\\^a": "â", "\\^\\i": "î","\\^u": "û", "\\^o": "ô",
+                  "\\^E": "Ê", "\\^A": "Â", "\\^\\I": "Î","\\^U": "Û", "\\^O": "Ô",
 
                   "\\v c": "č", "\\v s": "š", "\\v r": "ř", "\\v g": "ğ", "\\v e": "ě", "\\v z": "ž",
                   "\\v{c": "č", "\\v{s": "š", "\\v{r": "ř", "\\v{g": "ğ", "\\v{e": "ě", "\\v{z": "ž",
@@ -127,7 +127,7 @@ CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"page
 ##### Start UI (session no. = timestamp) #####
 
 print("============================================================\n")
-print("                     BibQuick v1.2.0")
+print("                     BibQuick v1.2.1")
 print(" Repository URL: https://github.com/Ryo-fkushima/BibQuick   \n")
 print("============================================================")
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
