@@ -13,15 +13,15 @@ this program exports references with any citation style.
 
 2. Clone this repository, and open it as a project with an IDE (e.g. VSCode, VSCodium)
 
-3. Type `uv sync` and run the python file (**BibQuick.py**) in the virtual environment.
+3. Type `uv sync` and run the python file (**BibQuick.py**) in the virtual environment. (i.e. If you are using VSCode/VSCodium, search the command `Python: Select Interpreter` and choose `Python 3.11.5 ('.venv: venv')`.)
 
-Once you have prepared the BibTeX database file, there are two options next: *interactive mode* and *batch convert mode*:
+There are two options next: *interactive mode* and *batch convert mode*:
 
 ### i. Interactive mode
 
 4. Edit `CurrentParameters` in **BibQuickParams.ini** as follows:
    
-   * `BibtexLocation` should be a path to the BibTeX database file. Enter the full path here.
+   * `BibtexLocation` should be a path to the BibTeX database file. Default database flle is **example_F24.bib**.
    * `InteractiveExport` is the option for exporting results. Set `yes` to get your results as a .txt file, or `no` to see results only in the console.
    * `BatchConvert` is the option to switch the interactive mode and batch convert mode. Here, set `no`. 
    * `AlphabeticalSorting` is the option for alphabetical sorting of the output when you set `BatchConvert=yes`. Here, this value is irrelevant.
