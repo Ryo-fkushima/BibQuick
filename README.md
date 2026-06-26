@@ -1,4 +1,4 @@
-# **BibQuick: Citation export assistant (v1.2.1)**
+# **BibQuick: Citation export assistant (v2.0.0)**
 
 > *If you are struggling to prepare reference lists, try **BibQuick**!*
 
@@ -9,19 +9,17 @@ this program exports references with any citation style.
 
 ## How to use
 
-0. Install python3 (>3.8 is recommended) to your computer and install the [**bibtexparser**](https://pypi.org/project/bibtexparser/) module.
+1. Install uv (https://docs.astral.sh/uv/).
 
-1. Make a new directory and put **BibQuick.py** and **BibQuickParams.ini** there.
+2. Clone this repository, and open it as a project with an IDE (e.g. VSCode, VSCodium)
 
-2. Prepare a BibTeX file of the bibliographic information (e.g., **example_F24.bib**) and put it anywhere accessible.
-
-   <img width = "600" src = "./fig1.png">
+3. Type `uv sync` and run the python file (**BibQuick.py**) in the virtual environment.
 
 Once you have prepared the BibTeX database file, there are two options next: *interactive mode* and *batch convert mode*:
 
 ### i. Interactive mode
 
-3. Edit `CurrentParameters` in **BibQuickParams.ini** as follows:
+4. Edit `CurrentParameters` in **BibQuickParams.ini** as follows:
    
    * `BibtexLocation` should be a path to the BibTeX database file. Enter the full path here.
    * `InteractiveExport` is the option for exporting results. Set `yes` to get your results as a .txt file, or `no` to see results only in the console.
@@ -32,7 +30,7 @@ Once you have prepared the BibTeX database file, there are two options next: *in
    For example:
    ```
    [CurrentParameters]
-   BibtexLocation=/Users/fukushimaryou/BibQuick/demo/example_F24.bib
+   BibtexLocation=./example_F24.bib
    InteractiveExport=no
    ;
    BatchConvert=no
@@ -51,13 +49,12 @@ Once you have prepared the BibTeX database file, there are two options next: *in
    Template=APA
    ```
 
-4. Move into the directory via your console and run **BibQuick.py**, and follow the instructions appearing in the console. You can search papers by typing their contracted names (e.g., `fukushima+2024`) or their BibTeX IDs (e.g., `@fukushima2024simulation`; `@` must be placed before the ID). If you set `InteractiveExport=yes`, you will finally get **[Session No].txt** in the directory.
+4. Run **BibQuick.py**, and follow the instructions appearing in the console. You can search papers by typing their contracted names (e.g., `fukushima+2024`) or their BibTeX IDs (e.g., `@fukushima2024simulation`; `@` must be placed before the ID). If you set `InteractiveExport=yes`, you will finally get **[Session No].txt** in the directory.
 
-   <img width = "600" src = "./fig2.png">
 
 ### ii. Batch convert from a .txt file
 
-3. Prepare a .txt file that includes the input list (e.g., **batch_example.txt**, **batch_example2.txt**) and put it anywhere accessible.
+3. Prepare a .txt file that includes the input list (e.g., [**batch_example.txt**](./batch_examples/batch_example.txt)) and put it anywhere accessible.
 
 4. Edit `CurrentParameters` in **BibQuickParams.ini** as follows:
    
@@ -70,7 +67,7 @@ Once you have prepared the BibTeX database file, there are two options next: *in
    For example:
    ```
    [CurrentParameters]
-   BibtexLocation=/Users/fukushimaryou/BibQuick/demo/example_F24.bib
+   BibtexLocation=./example_F24.bib
    InteractiveExport=no
    ;
    BatchConvert=yes
@@ -89,7 +86,7 @@ Once you have prepared the BibTeX database file, there are two options next: *in
    Template=APA
    ```
 
-5. Move into the directory via your console and run **BibQuick.py**. You will be asked the path to the input list. You can finally get **[Session No].txt** in the directory.
+5. Run **BibQuick.py**. You will be asked the path to the input list. You can finally get **[Session No].txt** in the directory.
 
 ## Tips for preparing the BibTeX database file
 
@@ -101,23 +98,6 @@ Once you have prepared the BibTeX database file, there are two options next: *in
 
 - You can search papers by their BibTeX IDs. If you use [PubMed](https://pubmed.ncbi.nlm.nih.gov) to search papers, you can add PMID as a BibTeX ID when preparing the BibTeX database file. This enables to find papers by @PMID.
 
-  For example:
-  ```
-  @article{37707320,
-  title = {Nanoscopic Elucidation of Spontaneous Self-Assembly of Severe Acute Respiratory Syndrome Coronavirus 2 (SARS-CoV-2) Open Reading Frame 6 (ORF6) Protein},
-  volume = {14},
-  ISSN = {1948-7185},
-  url = {http://dx.doi.org/10.1021/acs.jpclett.3c01440},
-  DOI = {10.1021/acs.jpclett.3c01440},
-  number = {38},
-  journal = {The Journal of Physical Chemistry Letters},
-  publisher = {American Chemical Society (ACS)},
-  author = {Nishide,  Goro and Lim,  Keesiang and Tamura,  Maiki and Kobayashi,  Akiko and Zhao,  Qingci and Hazawa,  Masaharu and Ando,  Toshio and Nishida,  Noritaka and Wong,  Richard W.},
-  year = {2023},
-  month = sep,
-  pages = {8385–8396}
-  }
-  ``` 
 
 ## Tips for preparing the input list for batch convert
 
@@ -128,19 +108,16 @@ Once you have prepared the BibTeX database file, there are two options next: *in
 
 - This version doesn't support generating journal abbreviations, changing capitalization in the paper's title, or handling specific characters (e.g., Asian characters).
 - As for the citation style setting, please refer to [**CitationStyleManual.md**](./CitationStyleManual.md).
+- The script was tested with Python 3.11.15 (on macOS Tahoe).
 
-
-## Requirement
-
-Required module: [bibtexparser](https://pypi.org/project/bibtexparser/) (tested with v1.4.1)
-
-The script was tested on: Python 3.11.15 (macOS Tahoe).
 
 ## Author
 
 Ryo Fukushima (rpifukushima@gmail.com)
 
 ## Updates
+
+Jun 27, 2026 (v2.0.0): Renewed as a uv project. Text input suggestion was implemented. 
 
 Jun 17, 2026 (v1.2.1): A few special characters were additionally implemented. 
 

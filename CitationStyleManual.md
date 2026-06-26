@@ -1,7 +1,7 @@
-# **Citation style manual (for BibQuick v1.2.x)**
+# **Citation style manual (for BibQuick v2.x.x)**
 
 ## Graphical abstract
-<img width = "800" src = "./graphicalabstract.png">
+<img width = "800" src = "./figs/graphicalabstract.png">
 
 ## 1. Overall structure
 The overall structure of citation is designated mainly by the `CitationStyle` parameter. 
