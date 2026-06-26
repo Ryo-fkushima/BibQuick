@@ -1,5 +1,5 @@
 #%%
-# BibQuick v1.2.1 (Jun 17, 2026)
+# BibQuick v2.0.0 (Jun 27, 2026)
 # Ryo Fukushima
 #
 import bibtexparser
@@ -9,6 +9,7 @@ import sys
 import os
 import configparser
 import datetime
+import questionary
 
 ##### Read parameter values from BibQuickParams.ini #####
 
@@ -127,7 +128,7 @@ CitationStyleConverter = {"T": "title", "J": "journal", "V": "volume", "P":"page
 ##### Start UI (session no. = timestamp) #####
 
 print("============================================================\n")
-print("                     BibQuick v1.2.1")
+print("                     BibQuick v2.0.0")
 print(" Repository URL: https://github.com/Ryo-fkushima/BibQuick   \n")
 print("============================================================")
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -478,7 +479,13 @@ else:
         file = open(outputpath, 'a', encoding="utf-8")
 
     while True:
-        SearchWord = input("\nType the reference name or @ID (case insensitive)\nex. surname+2024/surname&surname2024/surname2024\n(type 'e' to exit; type 'list' or 'idlist' to display database): ")
+        #SearchWord = input("\nType the reference name or @ID (case insensitive)\nex. surname+2024/surname&surname2024/surname2024\n(type 'e' to exit; type 'list' or 'idlist' to display database): ")
+
+        SearchWord = questionary.autocomplete(
+            "\nType the reference name or @ID (case insensitive)\nex. surname+2024/surname&surname2024/surname2024\n(type 'e' to exit; type 'list' or 'idlist' to display database): ",
+            choices = InLineCitations + IDs,
+            qmark=""
+        ).ask()
         SearchWord = SearchWord.strip()
         
         if SearchWord.lower() == "e":

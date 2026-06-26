@@ -1,0 +1,8 @@
+[project]
+name = "bibquick"
+version = "2.0.0"
+requires-python = ">=3.11"
+dependencies = [
+    "bibtexparser==1.4.4",
+    "questionary>=2.1.1",
+]
